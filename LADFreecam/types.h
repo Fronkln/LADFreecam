@@ -1,0 +1,40 @@
+#pragma once
+#include <iostream>;
+#include <fstream>;
+
+class vec4f
+{
+public:
+	float x;
+	float y;
+	float z;
+	float w;
+
+	friend std::ostream& operator<<(std::ostream& os, const vec4f& vec)
+	{
+		os << "{" << vec.x << " " << vec.y << " " << vec.z << "}";
+		return os;
+	};
+};
+
+class camera_info
+{
+public:
+	vec4f pos;
+	vec4f focus;
+	vec4f rot;
+	unsigned char unknown[32];
+	float fov;
+};
+
+class camera_update_info
+{
+public:
+	camera_info data;
+	float timeSinceUpdated = 0;
+	float deltaRot = 0;
+	bool getInfoNextFrame = false;
+};
+
+typedef __int64(__fastcall* ccamera_set_info)(void* camera, camera_info* info);
+typedef __int64(__fastcall* ccamera_set_info2)(void* camera, camera_info* info);
