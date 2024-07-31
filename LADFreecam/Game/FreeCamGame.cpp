@@ -42,3 +42,23 @@ void FreecamGame::pause_auth(bool pause)
 {
 
 }
+
+void FreecamGame::on_enable()
+{
+
+}
+
+void FreecamGame::on_disable() 
+{
+
+}
+
+void FreecamGame::init()
+{
+
+}
+
+void FreecamGame::update_enabled(float deltaPosX, float deltaPosY, float deltaFocusX, float deltaFocusY, float deltaFov) 
+{
+
+}

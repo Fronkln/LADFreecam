@@ -13,6 +13,7 @@
 #include <cstdint>
 #include "memory.h"
 #include <map>
+#include <thread>
 
 Game currentGame;
 Game currentGameName;
@@ -215,6 +216,21 @@ void input_update()
     
 }
 
+//for non-DE games
+void update_thread() 
+{
+    while (true)
+    {
+        if (enabled)
+        {
+            input_update();
+            currentGameClass->update_enabled(deltaPosX, deltaPosY, deltaFocusX, deltaFocusY, deltaFov);
+        }
+
+        Sleep(1);
+    }
+}
+
 void update_common(void* camera_entity, camera_info* info)
 {
     camera_info* ourInfoPtr = &m_cameraMap[(__int64)camera_entity]->data;
@@ -299,6 +315,7 @@ __int64 update_camera(void* camera_entity, camera_info* info)
 
     input_update(); //input update
     update_common(camera_entity, info); //general purpose DE movement update
+    currentGameClass->update_enabled(deltaPosX, deltaPosY, deltaFocusX, deltaFocusY, deltaFov);
     
     return _update_camera_trampoline(camera_entity, info);
 }
@@ -306,6 +323,11 @@ __int64 update_camera(void* camera_entity, camera_info* info)
 
 DWORD WINAPI AppThread(HMODULE hModule)
 {
+#if _DEBUG
+    std::cout << "Starting in 2 seconds...\n";
+    Sleep(2000);
+#endif
+
     AllocConsole();
     FILE* f;
     freopen_s(&f, "CONOUT$", "w", stdout);
@@ -321,7 +343,7 @@ DWORD WINAPI AppThread(HMODULE hModule)
     currentGameName = getGameName(currentGame);
     currentGameClass = get_game_class(currentGame);
 
-    std::cout << "Hello from Freecam world! " << "Game is: " << currentGameName.c_str() << std::endl;
+    std::cout << "\nHello from Freecam world! " << "Game is: " << currentGameName.c_str() << std::endl;
 
     //Necessary hooking and patching
     std::cout << "MinHook initialize result: " << (MH_Initialize() == MH_OK ? "OKAY!" : "FAIL!") << std::endl;
@@ -333,7 +355,6 @@ DWORD WINAPI AppThread(HMODULE hModule)
     else
     {
         std::cout << "Could not find camera function!" << std::endl;
-        return -1;
     }
 
     std::cout << "Camera create hook result: " << (MH_CreateHook(camera_func, update_camera, (LPVOID*)&_update_camera_trampoline) == MH_OK ? "OKAY!" : "FAIL!") << std::endl;
@@ -361,6 +382,14 @@ DWORD WINAPI AppThread(HMODULE hModule)
         std::cout << "Speed control values found!" << std::hex << speed_variables << std::endl;
     else
         std::cout << "Could not find speed control values!" << std::endl;
+
+    currentGameClass->init();
+
+    if (currentGame <= Game::Yakuza5)
+    {
+        std::thread updateThread(update_thread);
+        updateThread.detach();
+    }
 
     std::cout << "**********************\n";
     std::cout << "Yakuza Freecam Active!\n";
@@ -435,6 +464,7 @@ DWORD WINAPI AppThread(HMODULE hModule)
                     MH_EnableHook(MH_ALL_HOOKS);
 
                     currentGameClass->pause_auth(true);
+                    currentGameClass->on_enable();
 
                     std::cout << "Enabled freecam.\n";
                 }
@@ -454,6 +484,8 @@ DWORD WINAPI AppThread(HMODULE hModule)
                             delete x.second;
 
                         m_cameraMap.clear();
+
+                        currentGameClass->on_disable();
 
                         std::cout << "Disabled freecam.\n";
                     }

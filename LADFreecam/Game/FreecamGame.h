@@ -16,4 +16,8 @@ public:
 	virtual void* GetAuthPauseFunction();
 	virtual void enable_no_input(bool enable);
 	virtual void pause_auth(bool pause);
+	virtual void on_enable();
+	virtual void on_disable();
+	virtual void init();
+	virtual void update_enabled(float deltaPosX, float deltaPosY, float deltaFocusX, float deltaFocusY, float deltaFov);
 };

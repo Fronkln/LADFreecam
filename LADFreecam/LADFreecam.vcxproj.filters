@@ -25,6 +25,21 @@
     <Filter Include="MinHook">
       <UniqueIdentifier>{78dccfbb-7770-4392-9335-c9725c1744f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{c2fb06dc-04b2-4350-bc72-0bc7dda4e400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Y3">
+      <UniqueIdentifier>{99dfa962-2911-4cfa-8530-acf41f8e4a25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{bf013dd5-01cc-42db-9433-f46797f688b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Y3">
+      <UniqueIdentifier>{792f5ef3-3f9a-46a3-9b96-203884774d97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Y4">
+      <UniqueIdentifier>{f0a671f3-28ec-48b8-9797-8577ab1a9b9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -72,6 +87,21 @@
     <ClInclude Include="Game\FreecamGameJE.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\FreecamGameY3.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\Y3\CActionBase.h">
+      <Filter>Header Files\Entity\Y3</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\Y3\CActionCameraManager.h">
+      <Filter>Header Files\Entity\Y3</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\Y3\CCameraBase.h">
+      <Filter>Header Files\Entity\Y3</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\FreecamGameY4.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -99,6 +129,15 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\FreeCamGameJE.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FreeCamGameY3.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\Y3\CActionCameraManager.cpp">
+      <Filter>Source Files\Entity\Y3</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FreeCamGameY4.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>

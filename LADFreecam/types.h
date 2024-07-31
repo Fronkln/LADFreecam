@@ -2,6 +2,21 @@
 #include <iostream>;
 #include <fstream>;
 
+
+class vec3f
+{
+public:
+	float x;
+	float y;
+	float z;
+
+	friend std::ostream& operator<<(std::ostream& os, const vec3f& vec)
+	{
+		os << "{" << vec.x << " " << vec.y << " " << vec.z << "}";
+		return os;
+	};
+};
+
 class vec4f
 {
 public:
@@ -15,6 +30,13 @@ public:
 		os << "{" << vec.x << " " << vec.y << " " << vec.z << "}";
 		return os;
 	};
+};
+
+class matrix4x3
+{
+	vec4f vm0;
+	vec4f vm1;
+	vec4f vm2;
 };
 
 class camera_info

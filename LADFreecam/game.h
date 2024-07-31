@@ -1,5 +1,7 @@
 #pragma once
 #include "Game/FreecamGame.h"
+#include "Game/FreecamGameY3.h"
+#include "Game/FreecamGameY4.h"
 #include "Game/FreecamGameJE.h"
 #include "Game/FreecamGameYLAD.h"
 #include "Game/FreecamGameLJ.h"
@@ -13,6 +15,10 @@ FreecamGame* get_game_class(Game game)
 	default:
 		std::cout << "Unsupported game: " << getGameName(game) << std::endl;
 		return new FreecamGame();
+	case Game::Yakuza3:
+		return new FreecamGameY3();
+	case Game::Yakuza4:
+		return new FreecamGameY4();
 	case Game::YakuzaLikeADragon:
 		return new FreecamGameYLAD();
 	case Game::Judgment:
