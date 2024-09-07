@@ -4,8 +4,6 @@
 #include "PatternScan.h"
 #include "memory.h"
 
-CActionCameraManager::_DoCameraTransition m_transitionFuncY4 = (CActionCameraManager::_DoCameraTransition)PatternScan("48 89 5C 24 10 48 89 6C 24 18 57 48 83 EC ? 41 8B E8");
-
 vec4f calc_new_focus_point_y4(float cam_x, float cam_y, float cam_z, float speed_x, float speed_y)
 {
 	float theta = atan2(cam_z, cam_x) + speed_x;
@@ -28,12 +26,30 @@ vec4f calc_new_focus_point_y4(float cam_x, float cam_y, float cam_z, float speed
 };
 
 
-void FreecamGameY4::init()
+void* FreecamGameY4::GetPadUpdateFunction() 
 {
-	byte* baseAddr = (byte*)GetModuleHandle(NULL);
-	cameraManager = (CActionCameraManager**)(resolve_relative_addr(PatternScan("48 8B 0D ? ? ? ? E8 ? ? ? ? 41 89 86 C0 1A 00 00")));
-	noInputFunction = PatternScan("89 4C 24 08 53 56 57 48 81 EC ? ? ? ?");
-};
+	return PatternScan("89 4C 24 08 53 56 57 48 81 EC ? ? ? ?");
+}
+
+CActionCameraManager** FreecamGameY4::get_camera_manager()
+{
+	return (CActionCameraManager**)(resolve_relative_addr(PatternScan("48 8B 0D ? ? ? ? E8 ? ? ? ? 41 89 86 C0 1A 00 00")));
+}
+
+FreecamGameY3::_DoCameraTransition FreecamGameY4::get_camera_transition_func() 
+{
+	return (FreecamGameY3::_DoCameraTransition)PatternScan("48 89 5C 24 10 48 89 6C 24 18 57 48 83 EC ? 41 8B E8");
+}
+
+byte** FreecamGameY4::get_action_manager()
+{
+	return (byte**)resolve_relative_addr(PatternScan("48 8B 0D ? ? ? ? E8 ? ? ? ? 48 63 44 24 60"));
+}
+
+void* FreecamGameY4::get_no_ccc_func()
+{
+	return PatternScan("40 55 56 57 41 56 41 57 48 83 EC ? 48 C7 44 24 20 ? ? ? ? 48 89 9C 24 A0 00 00 00");
+}
 
 void FreecamGameY4::on_disable()
 {
@@ -42,11 +58,17 @@ void FreecamGameY4::on_disable()
 	if (mng == nullptr)
 		return;
 
-	if (mng->numCameras - 1 < lastCam)
+	if (mng->numCameras < lastCam)
 		lastCam = 2;
 
-	m_transitionFuncY4(mng, lastCam, 0);
+	_cameraFunc(mng, lastCam, 0);
 	enable_no_input(false);
+
+	if (noCCCFunction != nullptr)
+	{
+		BYTE patch[] = { 0x40, 0x55 };
+		mem::Patch((BYTE*)noCCCFunction, patch, 2);
+	}
 }
 
 void FreecamGameY4::on_enable()
@@ -70,8 +92,14 @@ void FreecamGameY4::on_enable()
 		startFov = freecamCam->fov;
 	}
 
-	m_transitionFuncY4(mng, 1, 0);
+	_cameraFunc(mng, 1, 0);
 	enable_no_input(true);
+
+	if (noCCCFunction != nullptr)
+	{
+		BYTE patch[] = { 0xC3, 0x90 };
+		mem::Patch((BYTE*)noCCCFunction, patch, 2);
+	}
 }
 
 void FreecamGameY4::update_enabled(float deltaPosX, float deltaPosY, float deltaFocusX, float deltaFocusY, float deltaFov)
@@ -105,18 +133,15 @@ void FreecamGameY4::update_enabled(float deltaPosX, float deltaPosY, float delta
 
 	currentCamera->focusPos = newFocus;
 	currentCamera->fov = startFov + deltaFov;
-}
 
-void FreecamGameY4::enable_no_input(bool enable)
-{
-	if (!enable)
+	if (actionManager != nullptr)
 	{
-		BYTE patch[] = { 0x89, 0xD2, 0x90, 0x90, };
-		mem::Patch((BYTE*)noInputFunction, patch, 4);
-	}
-	else
-	{
-		BYTE patch[] = { 0xC3, 0xD2, 0x90, 0x90, };
-		mem::Patch((BYTE*)noInputFunction, patch, 4);
+		void* actionMan = *actionManager;
+
+		if (actionMan != nullptr)
+		{
+			bool* paused = (bool*)((byte*)actionMan + 0x10);
+			enable_no_input(!(*paused));
+		}
 	}
 }

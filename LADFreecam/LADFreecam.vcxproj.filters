@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\Game">
       <UniqueIdentifier>{09e89a3b-1b32-469a-92bf-8cae82d32dd7}</UniqueIdentifier>
     </Filter>
@@ -39,6 +35,9 @@
     </Filter>
     <Filter Include="Header Files\Entity\Y4">
       <UniqueIdentifier>{f0a671f3-28ec-48b8-9797-8577ab1a9b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Y5">
+      <UniqueIdentifier>{43880194-620f-4aac-991b-e361b270b61f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +101,21 @@
     <ClInclude Include="Game\FreecamGameY4.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\FreecamGameY6.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\FreecamGameY5.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\Y5\CActionCameraManager.h">
+      <Filter>Header Files\Entity\Y5</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\Y5\CCameraBase.h">
+      <Filter>Header Files\Entity\Y5</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity\Y5\CActionManager.h">
+      <Filter>Header Files\Entity\Y5</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -131,13 +145,19 @@
     <ClCompile Include="Game\FreeCamGameJE.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Game\FreeCamGameY3.cpp">
+    <ClCompile Include="Game\FreecamGameY3.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Entity\Y3\CActionCameraManager.cpp">
       <Filter>Source Files\Entity\Y3</Filter>
     </ClCompile>
     <ClCompile Include="Game\FreeCamGameY4.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FreeCamGameY6.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FreecamGameY5.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,5 +168,8 @@
     <Library Include="Minhook\MinHook.x64.lib">
       <Filter>MinHook</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\x64\Release\LADFreecam.asi" />
   </ItemGroup>
 </Project>

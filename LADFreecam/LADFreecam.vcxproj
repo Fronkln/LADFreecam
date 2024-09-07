@@ -162,6 +162,9 @@
     <ClInclude Include="Entity\Y3\CActionBase.h" />
     <ClInclude Include="Entity\Y3\CActionCameraManager.h" />
     <ClInclude Include="Entity\Y3\CCameraBase.h" />
+    <ClInclude Include="Entity\Y5\CActionCameraManager.h" />
+    <ClInclude Include="Entity\Y5\CActionManager.h" />
+    <ClInclude Include="Entity\Y5\CCameraBase.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Game\FreecamGame.h" />
@@ -171,6 +174,8 @@
     <ClInclude Include="Game\FreecamGameLJ.h" />
     <ClInclude Include="Game\FreecamGameY3.h" />
     <ClInclude Include="Game\FreecamGameY4.h" />
+    <ClInclude Include="Game\FreecamGameY5.h" />
+    <ClInclude Include="Game\FreecamGameY6.h" />
     <ClInclude Include="Game\FreecamGameYLAD.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="Minhook\MinHook.h" />
@@ -187,8 +192,10 @@
     <ClCompile Include="Game\FreeCamGameLADGaiden.cpp" />
     <ClCompile Include="Game\FreeCamGameLADIW.cpp" />
     <ClCompile Include="Game\FreeCamGameLJ.cpp" />
-    <ClCompile Include="Game\FreeCamGameY3.cpp" />
+    <ClCompile Include="Game\FreecamGameY3.cpp" />
     <ClCompile Include="Game\FreeCamGameY4.cpp" />
+    <ClCompile Include="Game\FreecamGameY5.cpp" />
+    <ClCompile Include="Game\FreeCamGameY6.cpp" />
     <ClCompile Include="Game\FreeCamGameYLAD.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="pch.cpp">
@@ -201,6 +208,9 @@
   <ItemGroup>
     <Library Include="Minhook\libMinHook.x64.lib" />
     <Library Include="Minhook\MinHook.x64.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\x64\Release\LADFreecam.asi" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,7 +4,6 @@
 #include "PatternScan.h"
 #include "memory.h"
 
-CActionCameraManager::_DoCameraTransition m_transitionFuncY3 = (CActionCameraManager::_DoCameraTransition)(PatternScan(GetModuleHandle(NULL), "48 89 5C 24 10 48 89 6C 24 18 56 48 83 EC ? 41 8B E8 8B F2 48 8B D9"));
 
 vec4f calc_new_focus_point_y3(float cam_x, float cam_y, float cam_z, float speed_x, float speed_y)
 {
@@ -27,12 +26,28 @@ vec4f calc_new_focus_point_y3(float cam_x, float cam_y, float cam_z, float speed
 	return vec;
 };
 
+void* FreecamGameY3::GetPadUpdateFunction()
+{
+	return PatternScan("89 4C 24 08 53 56 57 48 81 EC ? ? ? ?");
+}
+
+CActionCameraManager** FreecamGameY3::get_camera_manager()
+{
+	return (CActionCameraManager**)(resolve_relative_addr(PatternScan("48 8B 0D ? ? ? ? E8 ? ? ? ? 90 48 8B C8")));
+}
+
+byte** FreecamGameY3::get_action_manager() 
+{
+	return (byte**)(resolve_relative_addr(PatternScan("48 8B 15 ? ? ? ? 74 ? 41 8B 81 84 01 00 00")));
+}
 
 void FreecamGameY3::init()
 {
-	byte* baseAddr = (byte*)GetModuleHandle(NULL);
-	cameraManager = (CActionCameraManager**)(resolve_relative_addr(PatternScan("48 8B 0D ? ? ? ? E8 ? ? ? ? 90 48 8B C8")));
-	noInputFunction = PatternScan("89 4C 24 08 53 56 57 48 81 EC ? ? ? ?");
+	actionManager = get_action_manager();
+	cameraManager = get_camera_manager();
+	noInputFunction = GetPadUpdateFunction();
+	_cameraFunc = get_camera_transition_func();
+	noCCCFunction = get_no_ccc_func();
 };
 
 void FreecamGameY3::on_disable()
@@ -42,11 +57,22 @@ void FreecamGameY3::on_disable()
 	if (mng == nullptr)
 		return;
 
-	if (mng->numCameras - 1 < lastCam)
+	if (mng->numCameras < lastCam)
 		lastCam = 2;
 
-	m_transitionFuncY3(mng, lastCam, 0);
+	_cameraFunc(mng, lastCam, 0);
 	enable_no_input(false);
+
+	if (noCCCFunction != nullptr)
+	{
+		BYTE patch[] = { 0x40, 0x55 };
+		mem::Patch((BYTE*)noCCCFunction, patch, 2);
+	}
+}
+
+FreecamGameY3::_DoCameraTransition FreecamGameY3::get_camera_transition_func()
+{
+	return (FreecamGameY3::_DoCameraTransition)(PatternScan(GetModuleHandle(NULL), "48 89 5C 24 10 48 89 6C 24 18 56 48 83 EC ? 41 8B E8 8B F2 48 8B D9"));
 }
 
 void FreecamGameY3::on_enable()
@@ -70,8 +96,14 @@ void FreecamGameY3::on_enable()
 		startFov = freecamCam->fov;
 	}
 
-	m_transitionFuncY3(mng, 1, 0);
+	_cameraFunc(mng, 1, 0);
 	enable_no_input(true);
+
+	if (noCCCFunction != nullptr)
+	{
+		BYTE patch[] = { 0xC3, 0x90 };
+		mem::Patch((BYTE*)noCCCFunction, patch, 2);
+	}
 }
 
 void FreecamGameY3::update_enabled(float deltaPosX, float deltaPosY, float deltaFocusX, float deltaFocusY, float deltaFov)
@@ -105,6 +137,18 @@ void FreecamGameY3::update_enabled(float deltaPosX, float deltaPosY, float delta
 
 	currentCamera->focusPos = newFocus;
 	currentCamera->fov = startFov + deltaFov;
+
+
+	if (actionManager != nullptr)
+	{
+		void* actionMan = *actionManager;
+
+		if (actionMan != nullptr)
+		{
+			bool* paused = (bool*)((byte*)actionMan + 0x10);
+			enable_no_input(!(*paused));
+		}
+	}
 }
 
 
@@ -119,5 +163,29 @@ void FreecamGameY3::enable_no_input(bool enable)
 	{
 		BYTE patch[] = { 0xC3, 0xD2, 0x90, 0x90, };
 		mem::Patch((BYTE*)noInputFunction, patch, 4);
+	}
+}
+
+void* FreecamGameY3::GetAuthPauseFunction()
+{
+	return PatternScan("44 8B F8 C5 FA 10 8F ? ? 00 00");
+}
+
+void* FreecamGameY3::get_no_ccc_func()
+{
+	return PatternScan("40 55 56 57 48 83 EC ? 48 C7 44 24 20 ? ? ? ? 48 89 9C 24 90 00 00 00");
+}
+
+void FreecamGameY3::pause_auth(bool pause)
+{
+	if (pause)
+	{
+		BYTE patch[] = { 0x41, 0xB7, 0x01 };
+		mem::Patch((BYTE*)auth_pause_func, patch, 3);
+	}
+	else
+	{
+		BYTE patch[] = { 0x44, 0x8B, 0xF8 };
+		mem::Patch((BYTE*)auth_pause_func, patch, 3);
 	}
 }
