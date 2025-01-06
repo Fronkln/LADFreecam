@@ -134,7 +134,7 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetDir)$(ProjectName)$(TargetExt)"  "G:\SteamLibrary\steamapps\common\Yakuza 4\mods\Freecam\$(ProjectName)$(TargetExt)"</Command>
+      <Command>copy /Y "$(TargetDir)$(ProjectName)$(TargetExt)"  "E:\SteamLibrary\steamapps\common\Yakuza 6 - The Song of Life\mods\Freecam\$(ProjectName)$(TargetExt)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

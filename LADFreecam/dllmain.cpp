@@ -342,6 +342,7 @@ DWORD WINAPI AppThread(HMODULE hModule)
     currentGame = getGame(currentGameName);
     currentGameName = getGameName(currentGame);
     currentGameClass = get_game_class(currentGame);
+    currentGameClass->isGog = GetModuleHandle(L"galaxy64.dll") != nullptr;
 
     std::cout << "\nHello from Freecam world! " << "Game is: " << currentGameName.c_str() << std::endl;
 
@@ -362,7 +363,7 @@ DWORD WINAPI AppThread(HMODULE hModule)
     currentGameClass->pad_input_func = (BYTE*)currentGameClass->GetPadUpdateFunction();
 
     if (currentGameClass->pad_input_func != nullptr)
-        std::cout << "Input block function found! " << std::hex << currentGameClass->pad_input_func << std::endl;
+        std::cout << "Input block function found! " << std::hex << (void*)currentGameClass->pad_input_func << std::endl;
     else
         std::cout << "Could not find input block function!" << std::endl;
 

@@ -9,6 +9,8 @@ public:
 	void* auth_pause_func = nullptr;
 	__int8 noInput_originalByte = 0;
 
+	bool isGog;
+
 public:
 	virtual ccamera_set_info GetCameraSetFunction();
 	virtual void* GetPadUpdateFunction();
