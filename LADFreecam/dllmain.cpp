@@ -95,13 +95,13 @@ vec4f calculate_rotation(vec4f focus, vec4f pos, float rotation)
     glm::vec3 up = glm::vec3(0, 1, 0);
     glm::mat4 look = glm::lookAt(glm::vec3(focus.x, focus.y, focus.z), glm::vec3(pos.x, pos.y, pos.z), up);
     
-    glm::vec3 direction = glm::vec3(look[2][0], look[2][1], look[2][2]);
+    glm::vec3 direction = glm::normalize(glm::vec3(look[0][2], look[1][2], look[2][2]));
     glm::mat4 m_new = glm::rotateNormalizedAxis(look, rotation, direction);
 
     vec4f vec = vec4f();
-    vec.x = m_new[1][0];
+    vec.x = m_new[0][1];
     vec.y = m_new[1][1];
-    vec.z = m_new[1][2];
+    vec.z = m_new[2][1];
 
     return vec;
 }
@@ -258,8 +258,7 @@ void update_common(void* camera_entity, camera_info* info)
 
     _currentInfo.focus = newFocus;
 
-    //Fix fix fix!!
-    //_currentInfo.rot = calculate_rotation(newFocus, _currentInfo.pos, deltaRot);
+    _currentInfo.rot = calculate_rotation(newFocus, _currentInfo.pos, deltaRot);
 
     info->pos = _currentInfo.pos;
     info->focus = _currentInfo.focus;
