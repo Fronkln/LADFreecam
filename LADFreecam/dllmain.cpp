@@ -40,6 +40,7 @@ float lookSpeed = 0.02f;
 
 float deltaPosX = 0;
 float deltaPosY = 0;
+float deltaPosZ = 0.0;
 
 float deltaFocusX = 0;
 float deltaFocusY = 0;
@@ -68,7 +69,7 @@ bool IsKeyHeld(int vk_key)
    return GetKeyState(vk_key) & 0x8000;
 }
 
-vec4f calc_new_focus_point(float cam_x, float cam_y, float cam_z, float speed_x, float speed_y)
+glm::vec3 calc_new_focus_point(float cam_x, float cam_y, float cam_z, float speed_x, float speed_y)
 {
     float theta = atan2(cam_z, cam_x) + speed_x;
 
@@ -81,7 +82,7 @@ vec4f calc_new_focus_point(float cam_x, float cam_y, float cam_z, float speed_x,
     float r_cam_z = r * sin(theta) * sin(phi);
     float r_cam_y = r * cos(phi);
 
-    vec4f vec = vec4f();
+    auto vec = glm::vec3();
     vec.x = r_cam_x;
     vec.y = r_cam_y;
     vec.z = r_cam_z;
@@ -90,15 +91,15 @@ vec4f calc_new_focus_point(float cam_x, float cam_y, float cam_z, float speed_x,
 };
 
 //Todo: Fix
-vec4f calculate_rotation(vec4f focus, vec4f pos, float rotation) 
+glm::vec3 calculate_rotation(glm::vec3 focus, glm::vec3 pos, float rotation) 
 {
     glm::vec3 up = glm::vec3(0, 1, 0);
-    glm::mat4 look = glm::lookAt(glm::vec3(focus.x, focus.y, focus.z), glm::vec3(pos.x, pos.y, pos.z), up);
+    glm::mat4 look = glm::lookAt(focus, pos, up);
     
     glm::vec3 direction = glm::normalize(glm::vec3(look[0][2], look[1][2], look[2][2]));
     glm::mat4 m_new = glm::rotateNormalizedAxis(look, rotation, direction);
 
-    vec4f vec = vec4f();
+    auto vec = glm::vec3();
     vec.x = m_new[0][1];
     vec.y = m_new[1][1];
     vec.z = m_new[2][1];
@@ -115,6 +116,7 @@ void input_update()
     deltaFocusY = 0;
     deltaPosX = 0;
     deltaPosY = 0;
+    deltaPosZ = 0;
 
     bool lShift = false;
     bool lAlt = false;
@@ -190,6 +192,9 @@ void input_update()
 
             if (input_move_right)
                 deltaPosX -= moveSpeed;
+
+            if (IsKeyHeld(VK_SPACE))
+              deltaPosZ += moveSpeed;
         }
 
         if (!lShift && !lCtrl)
@@ -236,29 +241,32 @@ void update_common(void* camera_entity, camera_info* info)
     camera_info* ourInfoPtr = &m_cameraMap[(__int64)camera_entity]->data;
     camera_info _currentInfo = *ourInfoPtr;
 
-    float r_cam_x = _currentInfo.focus.x - _currentInfo.pos.x;
-    float r_cam_y = _currentInfo.focus.y - _currentInfo.pos.y;
-    float r_cam_z = _currentInfo.focus.z - _currentInfo.pos.z;
+    glm::vec3 r_cam(0.0);
+    r_cam.x = _currentInfo.focus.x - _currentInfo.pos.x;
+    r_cam.y = _currentInfo.focus.y - _currentInfo.pos.y;
+    r_cam.z = _currentInfo.focus.z - _currentInfo.pos.z;
 
-    vec4f r;
-    r.x = r_cam_x;
-    r.y = r_cam_y;
-    r.z = r_cam_z;
+    auto focusOut = calc_new_focus_point(r_cam.x, r_cam.y, r_cam.z, deltaFocusX, deltaFocusY);
 
-    vec4f focusOut = calc_new_focus_point(r_cam_x, r_cam_y, r_cam_z, deltaFocusX, deltaFocusY);
+    auto up = _currentInfo.rot;
+    auto direction = glm::normalize(r_cam);
+    auto left = glm::cross(glm::vec3(up), direction);
 
-    _currentInfo.pos.x += r_cam_x * deltaPosY + deltaPosX * r_cam_z;
-    _currentInfo.pos.y += r_cam_y * deltaPosY;
-    _currentInfo.pos.z += r_cam_z * deltaPosY - deltaPosX * r_cam_x;
+    // Move laterally.
+    _currentInfo.pos += glm::vec4(deltaPosX * left, 0);
 
-    vec4f newFocus;
-    newFocus.x = _currentInfo.pos.x + focusOut.x;
-    newFocus.y = _currentInfo.pos.y + focusOut.y;
-    newFocus.z = _currentInfo.pos.z + focusOut.z;
+    // Move up-down
+    _currentInfo.pos += glm::vec4(up * deltaPosZ);
 
+    // Move forward
+    _currentInfo.pos += glm::vec4(r_cam * deltaPosY, 0);
+
+    glm::vec4 newFocus(0.0);
+    newFocus = _currentInfo.pos + glm::vec4(focusOut, 0.0);
     _currentInfo.focus = newFocus;
 
-    _currentInfo.rot = calculate_rotation(newFocus, _currentInfo.pos, deltaRot);
+    auto rot = calculate_rotation(newFocus, _currentInfo.pos, deltaRot);
+    _currentInfo.rot = glm::vec4(rot, 0.0);
 
     info->pos = _currentInfo.pos;
     info->focus = _currentInfo.focus;
