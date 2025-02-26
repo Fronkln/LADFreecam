@@ -243,15 +243,10 @@ void update_common(void* camera_entity, camera_info* info)
     camera_info* ourInfoPtr = &m_cameraMap[(__int64)camera_entity]->data;
     camera_info _currentInfo = *ourInfoPtr;
 
-    glm::vec3 r_cam(0.0);
-    r_cam.x = _currentInfo.focus.x - _currentInfo.pos.x;
-    r_cam.y = _currentInfo.focus.y - _currentInfo.pos.y;
-    r_cam.z = _currentInfo.focus.z - _currentInfo.pos.z;
-
-    auto focusOut = calc_new_focus_point(r_cam.x, r_cam.y, r_cam.z, deltaFocusX, deltaFocusY);
+    auto direction = glm::normalize(glm::vec3(_currentInfo.focus - _currentInfo.pos));
+    auto new_direction = calc_new_focus_point(direction.x, direction.y, direction.z, deltaFocusX, deltaFocusY);
 
     auto up = _currentInfo.rot;
-    auto direction = glm::normalize(r_cam);
     auto left = glm::cross(glm::vec3(up), direction);
 
     // Move laterally.
@@ -261,13 +256,11 @@ void update_common(void* camera_entity, camera_info* info)
     _currentInfo.pos += glm::vec4(up * deltaPosZ);
 
     // Move forward
-    _currentInfo.pos += glm::vec4(r_cam * deltaPosY, 0);
+    _currentInfo.pos += glm::vec4(direction * deltaPosY, 0);
 
-    glm::vec4 newFocus(0.0);
-    newFocus = _currentInfo.pos + glm::vec4(focusOut, 0.0);
-    _currentInfo.focus = newFocus;
+    _currentInfo.focus = _currentInfo.pos + glm::vec4(new_direction, 0.0);
 
-    auto rot = calculate_rotation(newFocus, _currentInfo.pos, deltaRot);
+    auto rot = calculate_rotation(_currentInfo.focus, _currentInfo.pos, deltaRot);
     _currentInfo.rot = glm::vec4(rot, 0.0);
 
     info->pos = _currentInfo.pos;
