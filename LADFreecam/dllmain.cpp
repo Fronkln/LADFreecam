@@ -193,7 +193,9 @@ void input_update()
             if (input_move_right)
                 deltaPosX -= moveSpeed;
 
-            if (IsKeyHeld(VK_SPACE))
+            if (IsKeyHeld(VK_LSHIFT) && IsKeyHeld(VK_SPACE))
+              deltaPosZ -= moveSpeed;
+            else if (IsKeyHeld(VK_SPACE))
               deltaPosZ += moveSpeed;
         }
 
@@ -410,7 +412,8 @@ DWORD WINAPI AppThread(HMODULE hModule)
         << "LShift+Up/Down Arrow - Adjust Movement Speed\n"
         << "LCtrl+Up/Down Arrow - Adjust Look Speed\n"
         << "LAlt+Up/Down Arrow - Adjust FOV\n\n"
-        << "WASD - Move Camera\nArrow Keys - Rotate Camera\n";
+        << "WASD - Move Camera\nArrow Keys - Rotate Camera\n"
+        << "Space/Shift+Space- Move Camera Up/Down";
 
 
     while (true)
