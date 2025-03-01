@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>;
 #include <fstream>;
+#include "GLM/glm.hpp"
 
 
 class vec3f
@@ -42,9 +43,9 @@ class matrix4x3
 class camera_info
 {
 public:
-	vec4f pos;
-	vec4f focus;
-	vec4f rot;
+	glm::vec4 pos;
+	glm::vec4 focus;
+	glm::vec4 rot;
 	unsigned char unknown[32];
 	float fov;
 };
