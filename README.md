@@ -14,7 +14,9 @@ LCtrl+Up/Down Arrow - Adjust Look Speed\
 LAlt+Up/Down Arrow - Adjust FOV
 
 WASD - Move Camera\
+Q/E - Tilt Camera
 Arrow Keys - Rotate Camera
+Space/Shift+Space- Move Camera Up/Down
 
 ![Image](https://github.com/Fronkln/LADFreecam/blob/main/image1.jpg)<br>
 ![Image](https://github.com/Fronkln/LADFreecam/blob/main/image2.jpg)<br>
