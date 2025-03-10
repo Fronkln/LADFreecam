@@ -171,6 +171,7 @@
     <ClInclude Include="Game\FreecamGameJE.h" />
     <ClInclude Include="Game\FreeCamGameLADGaiden.h" />
     <ClInclude Include="Game\FreecamGameLADIW.h" />
+    <ClInclude Include="Game\FreeCamGameLADPYIH.h" />
     <ClInclude Include="Game\FreecamGameLJ.h" />
     <ClInclude Include="Game\FreecamGameY3.h" />
     <ClInclude Include="Game\FreecamGameY4.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="Game\FreeCamGameJE.cpp" />
     <ClCompile Include="Game\FreeCamGameLADGaiden.cpp" />
     <ClCompile Include="Game\FreeCamGameLADIW.cpp" />
+    <ClCompile Include="Game\FreeCamGameLADPYIH.cpp" />
     <ClCompile Include="Game\FreeCamGameLJ.cpp" />
     <ClCompile Include="Game\FreecamGameY3.cpp" />
     <ClCompile Include="Game\FreeCamGameY4.cpp" />

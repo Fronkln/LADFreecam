@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 
 #include "string_utils.h"
 #include "types.h"
@@ -30,26 +31,32 @@ enum class Game
 	VFeSports,
 	LikeADragonGaidenTheManWhoErasedHisName,
 	LikeADragonInfiniteWealthDemo,
-	LikeADragonInfiniteWealth
+	LikeADragonInfiniteWealth,
+	LikeADragonPiratesInHawaii,
+	VF5Revo,
+	Century
 };
+
 
 Game getGame(string name)
 {
+	std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-	if (startsWith(name, "Yakuza3")) return Game::Yakuza3;
-	if (startsWith(name, "Yakuza4")) return Game::Yakuza4;
-	if (startsWith(name, "Yakuza5")) return Game::Yakuza5;
-	if (startsWith(name, "Yakuza0")) return Game::Yakuza0;
-	if (name == "YakuzaKiwami") return Game::YakuzaKiwami;
-	if (startsWith(name, "Yakuza6")) return Game::Yakuza6;
-	if (startsWith(name, "YakuzaKiwami2")) return Game::YakuzaKiwami2;
-	if (name == "YakuzaLikeADragon") return Game::YakuzaLikeADragon;
+	if (startsWith(name, "yakuza3")) return Game::Yakuza3;
+	if (startsWith(name, "yakuza4")) return Game::Yakuza4;
+	if (startsWith(name, "yakuza5")) return Game::Yakuza5;
+	if (startsWith(name, "yakuza0")) return Game::Yakuza0;
+	if (name == "yakuzakiwami") return Game::YakuzaKiwami;
+	if (startsWith(name, "yakuza6")) return Game::Yakuza6;
+	if (startsWith(name, "yakuzakiwami2")) return Game::YakuzaKiwami2;
+	if (startsWith(name, "yakuzalikeadragon")) return Game::YakuzaLikeADragon;
 	if (name == "eve") return Game::VFeSports;
-	if (name == "Judgment") return Game::Judgment;
-	if (name == "LostJudgment") return Game::LostJudgment;
-	if (name == "LikeaDragonGaiden") return Game::LikeADragonGaidenTheManWhoErasedHisName;
-	if (name == "LikeADragonGaiden") return Game::LikeADragonGaidenTheManWhoErasedHisName;
-	if (name == "LikeADragon8") return Game::LikeADragonInfiniteWealth;
+	if (name == "judgment") return Game::Judgment;
+	if (name == "lostjudgment") return Game::LostJudgment;
+	if (name == "likeadragongaiden") return Game::LikeADragonGaidenTheManWhoErasedHisName;
+	if (name == "likeadragon8") return Game::LikeADragonInfiniteWealth;
+	if (name == "vfrevobeta" || name == "vfrevo") return Game::VF5Revo;
+	if (name == "likeadragonpirates") return Game::LikeADragonPiratesInHawaii;
 
 	return Game::Unsupported;
 }
@@ -86,6 +93,8 @@ const char* getGameName(Game game)
 		return "Like a Dragon: Infinite Wealth";
 	case Game::LikeADragonInfiniteWealth:
 		return "Like a Dragon: Infinite Wealth";
+	case Game::LikeADragonPiratesInHawaii:
+		return "Like a Dragon: Pirate Yakuza in Hawaii";
 	case Game::Unsupported:
 	default:
 		return "Unsupported";

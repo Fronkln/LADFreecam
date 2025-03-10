@@ -83,8 +83,6 @@ void FreecamGameY5::update_enabled(float deltaPosX, float deltaPosY, float delta
 	if (paused)
 		return;
 
-	std::cout << std::hex  <<  offsetof(CCameraBase, fov) << std::endl;
-
 	float r_cam_x = currentCamera->focusPos.x - currentCamera->currentPosition.x;
 	float r_cam_y = currentCamera->focusPos.y - currentCamera->currentPosition.y;
 	float r_cam_z = currentCamera->focusPos.z - currentCamera->currentPosition.z;

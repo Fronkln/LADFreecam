@@ -416,18 +416,18 @@ DWORD WINAPI AppThread(HMODULE hModule)
         {
             if (timeStopMode == 0)
             {
-                speed_variables[0] = 0.001f;
-                speed_variables[1] = 0.001f;
-                speed_variables[2] = 0.001f;
+                speed_variables[0] = 0.000f;
+                speed_variables[1] = 0.000f;
+                speed_variables[2] = 0.000f;
             }
             else if (timeStopMode == 1)
             {
-                speed_variables[0] = 0.001f;
-                speed_variables[2] = 0.001f;
+                speed_variables[0] = 0.000f;
+                speed_variables[2] = 0.000f;
             }
             else if (timeStopMode == 2)
             {
-                speed_variables[1] = 0.001f;
+                speed_variables[1] = 0.000f;
             }
         }
 
