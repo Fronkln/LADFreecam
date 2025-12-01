@@ -388,10 +388,16 @@ DWORD WINAPI AppThread(HMODULE hModule)
 
     currentGameClass->init();
 
-    if (currentGame <= Game::Yakuza5)
+    if (currentGame <= Game::YakuzaKiwami)
     {
         std::thread updateThread(update_thread);
         updateThread.detach();
+    }
+
+    if (currentGame == Game::Yakuza0 || currentGame == Game::YakuzaKiwami)
+    {
+        moveSpeed = 0.0023f;
+        lookSpeed = 0.0075f;
     }
 
     std::cout << "**********************\n";
@@ -411,6 +417,11 @@ DWORD WINAPI AppThread(HMODULE hModule)
 
     while (true)
     {
+        void* window = GetForegroundWindow();
+
+        if (window == nullptr)
+            continue;
+
         //Gameplay time control
         if (timeStopMode > -1 && speed_variables != nullptr)
         {

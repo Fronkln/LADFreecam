@@ -3,6 +3,7 @@
 #include "Game/FreecamGameY3.h"
 #include "Game/FreecamGameY4.h"
 #include "Game/FreecamGameY5.h"
+#include "Game/FreecamGameOE.h"
 #include "Game/FreecamGameY6.h"
 #include "Game/FreecamGameJE.h"
 #include "Game/FreecamGameYLAD.h"
@@ -24,6 +25,10 @@ FreecamGame* get_game_class(Game game)
 		return new FreecamGameY4();
 	case Game::Yakuza5:
 		return new FreecamGameY5();
+	case Game::Yakuza0:
+		return new FreecamGameOE();
+	case Game::YakuzaKiwami:
+		return new FreecamGameOE();
 	case Game::Yakuza6:
 		return new FreecamGameY6();
 	case Game::YakuzaLikeADragon:
