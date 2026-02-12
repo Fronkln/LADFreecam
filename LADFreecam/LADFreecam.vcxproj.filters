@@ -131,6 +131,9 @@
     <ClInclude Include="Entity\OE\CActionCameraManager.h">
       <Filter>Header Files\Entity\OE</Filter>
     </ClInclude>
+    <ClInclude Include="Game\FreecamGameYK3.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -179,6 +182,9 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\FreecamGameOE.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FreecamGameYK3.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>

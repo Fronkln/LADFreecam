@@ -180,6 +180,7 @@
     <ClInclude Include="Game\FreecamGameY4.h" />
     <ClInclude Include="Game\FreecamGameY5.h" />
     <ClInclude Include="Game\FreecamGameY6.h" />
+    <ClInclude Include="Game\FreecamGameYK3.h" />
     <ClInclude Include="Game\FreecamGameYLAD.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="Minhook\MinHook.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="Game\FreeCamGameY4.cpp" />
     <ClCompile Include="Game\FreecamGameY5.cpp" />
     <ClCompile Include="Game\FreeCamGameY6.cpp" />
+    <ClCompile Include="Game\FreecamGameYK3.cpp" />
     <ClCompile Include="Game\FreeCamGameYLAD.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="pch.cpp">

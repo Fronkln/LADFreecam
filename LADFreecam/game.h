@@ -11,6 +11,7 @@
 #include "Game/FreecamGameLADGaiden.h"
 #include "Game/FreecamGameLADIW.h"
 #include "Game/FreeCamGameLADPYIH.h"
+#include "Game/FreeCamGameYK3.h"
 
 FreecamGame* get_game_class(Game game)
 {
@@ -43,5 +44,7 @@ FreecamGame* get_game_class(Game game)
 		return new FreecamGameLADIW();
 	case  Game::LikeADragonPiratesInHawaii:
 		return new FreecamGameLADPYIH();
+	case  Game::YakuzaKiwami3:
+		return new FreecamGameYK3();
 	}
 }
