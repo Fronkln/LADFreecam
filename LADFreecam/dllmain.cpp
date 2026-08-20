@@ -19,6 +19,8 @@ Game currentGame;
 Game currentGameName;
 FreecamGame* currentGameClass;
 
+bool input_enabled = true;
+bool lock_camera = false;
 
 bool altControls = false;
 
@@ -112,6 +114,9 @@ float deltaRot = 0;
 
 void input_update() 
 {
+    if (lock_camera)
+        return;
+
     deltaFocusX = 0;
     deltaFocusY = 0;
     deltaPosX = 0;
@@ -274,6 +279,7 @@ void update_common(void* camera_entity, camera_info* info)
 void enable_no_input(bool enable)
 {
     currentGameClass->enable_no_input(enable);
+    input_enabled = !enable;
 }
 
 //Main camera update code.
@@ -311,11 +317,18 @@ __int64 update_camera(void* camera_entity, camera_info* info)
     {
         updateInf->data = *info;
         updateInf->getInfoNextFrame = false;
-
-        enable_no_input(true);
     }
 
     input_update(); //input update
+
+    if (enabled)
+    {
+        if (lock_camera)
+            enable_no_input(false);
+        else
+            enable_no_input(true);
+    }
+
     update_common(camera_entity, info); //general purpose DE movement update
     currentGameClass->update_enabled(deltaPosX, deltaPosY, deltaFocusX, deltaFocusY, deltaFov);
     
@@ -330,9 +343,16 @@ DWORD WINAPI AppThread(HMODULE hModule)
     Sleep(2000);
 #endif
 
-    AllocConsole();
-    FILE* f;
-    freopen_s(&f, "CONOUT$", "w", stdout);
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        FILE* fp;
+        freopen_s(&fp, "CONOUT$", "w", stdout);
+    }
+    else
+    {
+        AllocConsole();
+        FILE* f;
+        freopen_s(&f, "CONOUT$", "w", stdout);
+    }
 
     // Get the name of the current game
     wchar_t exePath[MAX_PATH + 1];
@@ -407,6 +427,7 @@ DWORD WINAPI AppThread(HMODULE hModule)
     std::cout 
         << "Alt+M - Enable/Disable\n"
         << "Alt+T - Change between Everything/NPC/Player Gameplay Time Stop\n\n"
+        << "Alt+H - Toggle camera locked in place (input allowed)\n\n"
         << "Page Up - Enable mouselook mode\nPage Down - Disable mouselook mode\n\n"
         << "LShift+Up/Down Arrow - Adjust Movement Speed\n"
         << "LCtrl+Up/Down Arrow - Adjust Look Speed\n"
@@ -526,6 +547,13 @@ DWORD WINAPI AppThread(HMODULE hModule)
                     std::cout << "Disabled";
 
                 std::cout << std::endl;
+            }
+
+            //H
+            if (IsKeyDown(0x48))
+            {
+                lock_camera = !lock_camera;
+                std::cout << "Locked camera mode: " << (lock_camera ? "Enabled " : "Disabled") << std::endl;
             }
         }
         

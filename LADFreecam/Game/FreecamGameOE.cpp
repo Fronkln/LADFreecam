@@ -31,7 +31,7 @@ void FreecamGameOE::init()
 	ActionCameraManager = (CActionCameraManager**)resolve_relative_addr(PatternScan("48 8B 0D ? ? ? ? E8 ? ? ? ? 0F 57 D2 BA ? ? ? ? 48 8D 4C 24 40"));
 
 	cameraUpdateCall = PatternScan("FF 90 ? ? ? ? 48 8B CB E8 ? ? ? ? 48 8B 03 48 8B CB FF 90");
-	noInputFunction = PatternScan("48 89 5C 24 08 48 89 74 24 10 57 48 81 EC ? ? ? ? 48 8B D9 8B 89 E0 00 00 00");
+	noInputFunction = PatternScan("4C 8B DC 49 89 6B ? 49 89 73 ? 49 89 7B");
 
 	if (noInputFunction == nullptr)
 	{
@@ -134,8 +134,8 @@ void FreecamGameOE::enable_no_input(bool enable)
 		}
 		else
 		{
-			BYTE patch[] = { 0x48, 0x89, };
-			mem::Patch((BYTE*)noInputFunction, patch, 2);
+			BYTE patch[] = { 0x4C, 0x8B, 0xDC };
+			mem::Patch((BYTE*)noInputFunction, patch, 3);
 		}
 	}
 	else
