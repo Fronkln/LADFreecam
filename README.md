@@ -3,9 +3,10 @@
 
 Controls:
 
-Alt+M - Enable/Disable
+Alt+M - Enable/Disable<br>
+Alt+H - Toggle camera locked in place (player input allowed)<br>
+Alt+T - Change between Everything/NPC/Player Gameplay Time Stop
 
-Alt+T - Change between Everything/NPC/Player Gameplay Time Stop\
 Page Up - Enable mouselook mode\
 Page Down - Disable mouselook mode
 <br><br>
